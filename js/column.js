@@ -16,6 +16,7 @@ class Column {
     this.status = data.status;
     this.cards = new Map();
     this.element = null;
+    this.wipLimit = data.wipLimit || 0; // 0 means no limit
 
     if (Array.isArray(data.cards)) {
       data.cards.forEach(cardData => {
@@ -52,8 +53,10 @@ class Column {
 
     const titleEl = this.element.querySelector('.column-title');
     const cardsContainer = this.element.querySelector('.column-cards');
+    const cardCount = this.element.querySelector('.card-count');
     
     titleEl.textContent = this.title;
+    cardCount.textContent = `${this.cards.size}${this.wipLimit ? '/' + this.wipLimit : ''}`;
     cardsContainer.innerHTML = '';
     
     this.cards.forEach(card => {
@@ -103,11 +106,19 @@ class Column {
    * @param {Card} card - The card to add
    */
   addCard(card) {
+    if (this.wipLimit > 0 && this.cards.size >= this.wipLimit) {
+      console.warn(`Column ${this.title} has reached its WIP limit of ${this.wipLimit} cards`);
+      return false;
+    }
+
     this.cards.set(card.id, card);
     if (this.element) {
       const cardsContainer = this.element.querySelector('.column-cards');
       cardsContainer.appendChild(card.createElement());
+      this.element.querySelector('.card-count').textContent = 
+        `${this.cards.size}${this.wipLimit ? '/' + this.wipLimit : ''}`;
     }
+    return true;
   }
 
   /**
@@ -131,6 +142,7 @@ class Column {
       id: this.id,
       title: this.title,
       status: this.status,
+      wipLimit: this.wipLimit,
       cards: Array.from(this.cards.values()).map(card => card.toJSON())
     };
   }

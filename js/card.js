@@ -11,6 +11,9 @@ class Card {
    * @param {string} data.status - Current status/column of the card
    * @param {Date} data.createdAt - Creation date
    * @param {Date} data.updatedAt - Last update date
+   * @param {string} data.priority - Card priority (low, medium, high)
+   * @param {string[]} data.labels - Card labels
+   * @param {string} data.dueDate - Due date for the card
    */
   constructor(data) {
     this.id = data.id;
@@ -19,6 +22,9 @@ class Card {
     this.status = data.status;
     this.createdAt = new Date(data.createdAt || Date.now());
     this.updatedAt = new Date(data.updatedAt || Date.now());
+    this.priority = data.priority || 'medium';
+    this.labels = data.labels || [];
+    this.dueDate = data.dueDate ? new Date(data.dueDate) : null;
     this.element = null;
   }
 
@@ -44,9 +50,32 @@ class Card {
   render() {
     if (!this.element) return;
 
-    this.element.querySelector('.card-title').textContent = this.title;
-    this.element.querySelector('.card-description').textContent = this.description;
-    this.element.querySelector('.card-date').textContent = formatDate(this.updatedAt);
+    this.element.className = `kanban-card priority-${this.priority}`;
+    
+    const content = `
+      <div class="card-header">
+        <h3 class="card-title">${this.title}</h3>
+        <div class="card-actions">
+          <button class="edit-card">Edit</button>
+          <button class="delete-card">×</button>
+        </div>
+      </div>
+      ${this.labels.length ? `
+        <div class="card-labels">
+          ${this.labels.map(label => `<span class="label ${label}">${label}</span>`).join('')}
+        </div>
+      ` : ''}
+      ${this.description ? `<div class="card-description">${this.description}</div>` : ''}
+      ${this.dueDate ? `
+        <div class="card-due-date ${this.isOverdue() ? 'overdue' : ''}">
+          Due: ${formatDate(this.dueDate)}
+        </div>
+      ` : ''}
+      <div class="card-date">Updated: ${formatDate(this.updatedAt)}</div>
+    `;
+
+    this.element.innerHTML = content;
+    this.attachEventListeners();
   }
 
   /**
@@ -93,8 +122,20 @@ class Card {
       description: this.description,
       status: this.status,
       createdAt: this.createdAt.toISOString(),
-      updatedAt: this.updatedAt.toISOString()
+      updatedAt: this.updatedAt.toISOString(),
+      priority: this.priority,
+      labels: this.labels,
+      dueDate: this.dueDate ? this.dueDate.toISOString() : null
     };
+  }
+
+  /**
+   * Check if the card is overdue
+   * @returns {boolean} True if the card is overdue
+   */
+  isOverdue() {
+    if (!this.dueDate) return false;
+    return this.dueDate < new Date();
   }
 }
 
