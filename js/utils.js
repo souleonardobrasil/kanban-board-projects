@@ -51,3 +51,18 @@ export function debounce(func, wait) {
     timeout = setTimeout(later, wait);
   };
 }
+
+/**
+ * Check if a date is overdue (before today)
+ * @param {string|Date} dateStr - Date to check
+ * @returns {boolean} True if date is overdue
+ */
+export function isOverdue(dateStr) {
+  if (!dateStr) return false;
+  const date = new Date(dateStr);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return date < today;
+    timeout = setTimeout(later, wait);
+  };
+}
