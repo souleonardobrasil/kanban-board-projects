@@ -65,4 +65,3 @@ export function isOverdue(dateStr) {
   return date < today;
     timeout = setTimeout(later, wait);
   };
-}
