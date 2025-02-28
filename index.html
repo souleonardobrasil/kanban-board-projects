@@ -11,7 +11,21 @@
   <header>
     <h1>Kanban Board</h1>
     <div id="board-controls">
-      <!-- Controles do quadro virão aqui -->
+      <div class="search-controls">
+        <input type="text" id="search-input" placeholder="Pesquisar cartões...">
+        <select id="priority-filter">
+          <option value="">Prioridade</option>
+          <option value="low">Baixa</option>
+          <option value="medium">Média</option>
+          <option value="high">Alta</option>
+        </select>
+        <select id="due-date-filter">
+          <option value="">Data de Entrega</option>
+          <option value="overdue">Atrasado</option>
+          <option value="today">Hoje</option>
+          <option value="week">Esta Semana</option>
+        </select>
+      </div>
     </div>
   </header>
   
@@ -20,16 +34,40 @@
   </main>
   
   <footer>
-    <!-- Informações e controles adicionais -->
+    <div class="board-info">
+      <span id="total-cards">Total de Cartões: 0</span>
+      <button id="clear-filters" class="secondary-btn">Limpar Filtros</button>
+    </div>
   </footer>
   
   <!-- Templates para JS -->
   <template id="column-template">
-    <!-- Estrutura da coluna -->
+    <div class="kanban-column">
+      <div class="column-header">
+        <h2 class="column-title"></h2>
+        <span class="card-count">0</span>
+      </div>
+      <div class="column-cards"></div>
+      <div class="column-footer">
+        <button class="add-card">+ Adicionar Cartão</button>
+      </div>
+    </div>
   </template>
   
   <template id="card-template">
-    <!-- Estrutura do cartão -->
+    <div class="kanban-card">
+      <div class="card-header">
+        <h3 class="card-title"></h3>
+        <div class="card-actions">
+          <button class="edit-card">Editar</button>
+          <button class="delete-card">×</button>
+        </div>
+      </div>
+      <div class="card-labels"></div>
+      <div class="card-description"></div>
+      <div class="card-due-date"></div>
+      <div class="card-date"></div>
+    </div>
   </template>
   
   <!-- Scripts -->
