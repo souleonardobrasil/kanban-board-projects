@@ -264,6 +264,77 @@ class KanbanBoard {
     const storage = new Storage();
     storage.saveBoard(this.toJSON());
   }
+
+  /**
+   * Filter cards based on search term and filter criteria
+   * @param {string} searchTerm - Text to search for in card title and description
+   * @param {Object} filters - Filter criteria (priority, labels, etc)
+   */
+  filterCards(searchTerm, filters = {}) {
+    // Reset visual state of all cards
+    document.querySelectorAll('.kanban-card').forEach(card => {
+      card.style.display = 'block';
+    });
+    
+    if (!searchTerm && Object.keys(filters).length === 0) {
+      return; // Nothing to filter
+    }
+    
+    // Iterate through all columns and cards
+    this.columns.forEach(column => {
+      column.cards.forEach(card => {
+        const cardElement = document.querySelector(`.kanban-card[data-id="${card.id}"]`);
+        if (!cardElement) return;
+        
+        let visible = true;
+        
+        // Filter by search term
+        if (searchTerm) {
+          const searchLower = searchTerm.toLowerCase();
+          const titleMatch = card.title.toLowerCase().includes(searchLower);
+          const descMatch = card.description.toLowerCase().includes(searchLower);
+          visible = titleMatch || descMatch;
+        }
+        
+        // Apply additional filters
+        if (visible && filters.priority) {
+          visible = card.priority === filters.priority;
+        }
+        
+        if (visible && filters.label) {
+          visible = card.labels.includes(filters.label);
+        }
+        
+        if (visible && filters.dueDate) {
+          const today = new Date();
+          today.setHours(0, 0, 0, 0);
+          
+          switch (filters.dueDate) {
+            case 'overdue':
+              visible = card.dueDate && new Date(card.dueDate) < today;
+              break;
+            case 'today':
+              const tomorrow = new Date(today);
+              tomorrow.setDate(tomorrow.getDate() + 1);
+              visible = card.dueDate && 
+                       new Date(card.dueDate) >= today && 
+                       new Date(card.dueDate) < tomorrow;
+              break;
+            case 'week':
+              const nextWeek = new Date(today);
+              nextWeek.setDate(nextWeek.getDate() + 7);
+              visible = card.dueDate && 
+                       new Date(card.dueDate) >= today && 
+                       new Date(card.dueDate) <= nextWeek;
+              break;
+          }
+        }
+        
+        // Update card visibility
+        cardElement.style.display = visible ? 'block' : 'none';
+      });
+    });
+  }
 }
 
 export default KanbanBoard;
