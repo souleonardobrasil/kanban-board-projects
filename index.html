@@ -58,15 +58,26 @@
     <div class="kanban-card">
       <div class="card-header">
         <h3 class="card-title"></h3>
+        <div class="card-priority">
+          <select class="priority-select">
+            <option value="low">Baixa</option>
+            <option value="medium">Média</option>
+            <option value="high">Alta</option>
+          </select>
+        </div>
         <div class="card-actions">
-          <button class="edit-card">Editar</button>
-          <button class="delete-card">×</button>
+          <button class="edit-card" title="Editar cartão"><i class="fas fa-edit"></i></button>
+          <button class="delete-card" title="Excluir cartão">×</button>
         </div>
       </div>
-      <div class="card-labels"></div>
-      <div class="card-description"></div>
-      <div class="card-due-date"></div>
-      <div class="card-date"></div>
+      <div class="card-content">
+        <div class="card-labels"></div>
+        <div class="card-description"></div>
+        <div class="card-metadata">
+          <div class="card-due-date"></div>
+          <div class="card-date"></div>
+        </div>
+      </div>
     </div>
   </template>
   

@@ -62,16 +62,61 @@ main {
 .kanban-card {
   background-color: white;
   border-radius: 3px;
-  box-shadow: 0 1px 0 rgba(9, 30, 66, 0.25);
-  padding: 10px;
+  box-shadow: 0 1px 3px rgba(9, 30, 66, 0.25);
+  padding: 12px;
   margin-bottom: 8px;
-  cursor: pointer;
+  transition: box-shadow 0.2s ease;
+}
+
+.kanban-card:hover {
+  box-shadow: 0 2px 5px rgba(9, 30, 66, 0.3);
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.card-priority {
+  margin: 0 8px;
+}
+
+.priority-select {
+  padding: 2px 4px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 0.8rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 4px;
+}
+
+.card-actions button {
+  background: none;
+  border: none;
+  padding: 4px;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.card-actions button:hover {
+  opacity: 1;
+}
+
+.card-content {
+  font-size: 0.9rem;
 }
 
 .card-labels {
@@ -86,6 +131,23 @@ main {
   border-radius: 3px;
   font-size: 0.8rem;
   color: white;
+}
+
+.card-description {
+  color: #5e6c84;
+  margin-bottom: 8px;
+}
+
+.card-metadata {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.8rem;
+  color: #5e6c84;
+}
+
+.card-due-date.overdue {
+  color: #de350b;
+  font-weight: 500;
 }
 
 /* Cores de prioridade */
